@@ -13,5 +13,4 @@ FrameSequence.o: FrameSequence.cpp FrameSequence.h
 clean:
 	rm -f *.o
 	rm extractor.exe
-	rm pgmOut.pgm
-	rm Sequence*.pgm
+	rm -f S*.pgm

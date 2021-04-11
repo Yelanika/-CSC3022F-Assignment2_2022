@@ -1,3 +1,12 @@
+/***
+ * Yelanika Gunasekara
+ * GNSSEN002
+ * extractor.cpp
+ * This is the driver file.
+ * It extracts the data from the command line and calls methods from the FrameSequence class.
+ * 
+ * ***/
+
 #include "FrameSequence.h"
 #include <iostream>
 #include <sstream>
@@ -7,26 +16,26 @@
 //here *argv[] is an array of pointers pointing to command line
 int main (int argc, char *argv[]) {
 
-    std::cout << "Main Func"<< std::endl;
-
     //the file that will be read
     std::string pgmFile = "";
     pgmFile = argv[1];
-
-    //cordinates for the beginning and end of the frame tranjectory
-    int x1 = 0;
-    int x2 = 0;
-    int y1 = 0;
-    int y2 = 0;
 
     //the size of the frame for tracjectory 
     int width = 0;
     int height = 0;
 
+    //the x and y coordinates that indicate the frame tranjectories
+    std::vector<int> x;
+    std::vector<int> y;
+
     //operation that will be performed on the frame/pixel and it's name
     std::vector<std::string> operation;
     std::vector<std::string> name;
     
+    //Temp x and y holding variables
+    int xV = 0;
+    int yV = 0;
+
     //if no parameters are entered at runtime, an error meesage will print
     if (argc == 1) {
         std::cerr << "No parameters entered" << std::endl;
@@ -34,49 +43,76 @@ int main (int argc, char *argv[]) {
     // when parameters are entered, they will be read here
     else {
 
-        //std::cout << argc << std::endl;
+        int e = 2;
+        while (e < argc) {
+            std::string flag = "";
+            std::istringstream iss(argv[e]);
+            iss >> flag;
+           
+            //if the -p flag is found 
+            if (flag.compare("-p") == 0){
+                int n = 0;
+                e++;
+                std::istringstream iss4(argv[e]);
+                iss4 >> n;
 
-        for (int i = 0; i < 10; ++i) {
-          //  std::cout << i << std::endl;
-            std::istringstream iss(argv[i]);
+                for (int s = 0; s < n; s++) {
+                    e++;
+                    std::istringstream iss2(argv[e]);
+                    iss2 >> xV;
+                    x.push_back(xV);
 
-            switch (i) {
-                case 3: {
-                    iss >> x1; 
-                    break;
+                    e++;
+                    std::istringstream iss3(argv[e]);
+                    iss3 >> yV;
+                    y.push_back(yV);
                 }
-                case 4: {
-                    iss >> y1; 
-                    break;
-                }
-                case 5: {
-                    iss >> x2; 
-                    break;
-                }
-                case 6: {
-                    iss >> y2; 
-                    break;
-                }
-                case 8: {
-                    iss >> width; 
-                    break;
-                }case 9: {
-                    iss >> height; 
-                    break;
+                
+            }
+            //if the -t flag is found
+            else if (flag.compare("-t") == 0) {
+                 std::cout << "-t" << std::endl;
+                for (int s = 0; s < 2; s++) {
+
+                    e++;
+                    std::istringstream iss2(argv[e]);
+                    iss2 >> xV;
+                   //  std::cout << argv[e] << std::endl;
+                    x.push_back(xV);
+
+                    e++;
+                    std::istringstream iss3(argv[e]);
+                    iss3 >> yV;
+                    y.push_back(yV);
                 }
             }
-        }
 
-        int i = 10;
+            //the -s flag data is read
+            e++;
 
-        while (i < argc) {
-            i++;
+            e++;
+            std::istringstream iss2(argv[e]);
+            iss2 >> width;
 
-            operation.push_back(argv[i]);
-            i++;;
+            e++;
+            std::istringstream iss3(argv[e]);
+            iss3 >> height;
 
-            name.push_back(argv[i]);
-            i++;
+            //the -w flag data is read
+            for (int s = e; s < argc; s++ ) {
+                e++;
+                std::string temp;
+                e++;
+                std::istringstream iss5(argv[e]);
+                iss5 >> temp;
+                operation.push_back(temp);
+
+                e++;
+                std::istringstream iss6(argv[e]);
+                iss6 >> temp;
+                name.push_back(temp);
+            }
+
         }
         
     }
@@ -84,8 +120,9 @@ int main (int argc, char *argv[]) {
     GNSSEN002::FrameSequence FSObject; 
     FSObject.getImageDimensions(pgmFile);
 
+
     for (int i = 0; i < operation.size(); i++) {
-        FSObject.tracjectory(x1,y1,x2,y2,width,height, operation[i], name[i]);
+        FSObject.tracjectory(x,y,width,height, operation[i], name[i]);
     }
 
     return 0;

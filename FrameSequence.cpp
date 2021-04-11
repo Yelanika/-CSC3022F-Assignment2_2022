@@ -1,3 +1,10 @@
+/**
+ * Yelanika Gunasekara
+ * GNSSEN002
+ * FrameSequence.cpp
+ * This is the source file implements the methods of the FrameSequence class.
+ * **/
+
 #include "FrameSequence.h"
 #include <iostream>
 #include <vector>
@@ -9,7 +16,6 @@
  
 namespace GNSSEN002 {
  
-   // FrameSequence( row , col,mImage) : row(row), col(col), mImage(mImage) {};
     int row = 0;
     int col = 0;
     unsigned char ** mImage = nullptr;
@@ -25,13 +31,8 @@ namespace GNSSEN002 {
         bool Dimensions = false;
         
         std::string p5;
-        std::vector<std::string> comments;
         std::string twofivefive;
-      //  mImage = nullptr;
         std::string temp;     
-        
- 
-        int count = 0;
  
         //Error checking: if the file does not exist or fails to open
         if (!in) {
@@ -55,9 +56,7 @@ namespace GNSSEN002 {
                   
             std::istringstream iss(temp);
             iss >> col >> std::ws >> row;
-            std::cout << "row: " << row << " col: " << col << std::endl;
  
-            //std::getline(in, twofivefive);
             in >> twofivefive >> std::ws;
  
             mImage = new unsigned char*[col];
@@ -68,30 +67,106 @@ namespace GNSSEN002 {
                     in.read((char*)&mImage[i][j],1);
                 }
             }
-            std::cout << "row: " << row << " col: " << col << std::endl;
         }
  
         in.close();
+    }
+
+    void FrameSequence::tracjectory(std::vector<int> x, std::vector<int> y, int width, int height, std::string operation, std::string name) {
  
-//sloan = 1, large = 0;  
-        // std::cout << row << "r : c" << col << std::endl;
-        // std::fstream out;
-        // out.open("pgmOut.pgm", std::ios::out | std::ios::binary);
- 
-        // out << "P5" << std::endl;
-        // out << "#The output file of the in file" << std::endl;
-        // out << col << " " << row << std::endl;
-        // out << "255" << std::endl;
- 
-        // for (int i = 0; i< col; ++i) {
-        //     for (int j =0; j < row; ++j) {
-        //         out.write((char*)&mImage[i][j],1);
-        //     }
-        // }
- 
-        //  out.close();
- 
-        // std::cout << "It works to this point" << std::endl;
+        for (int d = 0; d < x.size()-1; d++ ) {
+
+          //  std::cout << "d here" << std::endl;
+            int x1 = x[d];
+            int x2 = x[d+1];
+           // std::cout << "x here" << std::endl;
+            int y1 = y[d];
+            int y2 = y[d+1];
+            std::cout << d << std::endl;
+
+
+            float g = ((float)(y2-y1))/((float)(x2-x1));
+            //std::cout << "x1: " << x1 << " y1: " << y1 << " x2: " << x2 << " y2: " << y2 << " g: " << g << std::endl;
+            int count = 0;
+            int op = 0;
+    
+            if (operation.compare("none") == false) {
+                op=1;
+            }
+            else if (operation.compare("invert") == false) {
+                op=2;
+            }
+            else if (operation.compare("reverse") == false) {
+                op=1;
+            }
+            else if (operation.compare("revinvert") == false) {
+                op=2;
+            }
+
+            float ystart = y1;
+            int slope = 0;
+
+            if (std::fabs(g) < 1.0) {
+
+                if (x2 < x1)
+                    slope = -1;
+                else
+                    slope = 1;
+                
+                for (int x =x1; x < x2; x = x + slope) {
+                    ystart = ystart + g; 
+                    switch (op) {
+                        case 1: { 
+                            FrameSequence::none(x, std::round(ystart), width, height);
+                            count++;
+                            break;
+                        }
+                        case 2: {
+                            FrameSequence::invert(x, std::round(y1), width, height);
+                            count++;
+                            break;
+                        }
+                    }
+                }
+
+
+            }
+            else {
+                if (y2 < y1) 
+                    slope = -1;
+                else    
+                    slope = 1;
+                for (int y=y1; y < y2; y = y +(slope)) {
+                    x1+=(1/g);
+                    switch (op) {
+                        case 1: { 
+                            FrameSequence::none(std::round(x1), y, width, height);
+                            count++;
+                            break;
+                        }
+                        case 2: {
+                            FrameSequence::invert(std::round(x1), y, width, height);
+                            count++;
+                            break;
+                        }
+                    };
+                }
+            }
+        }
+
+        if (operation.compare("none") == false) {
+            FrameSequence::printImage(width,height, name);
+        }
+        else if (operation.compare("invert") == false) {
+            FrameSequence::printImage(width,height, name);          
+        }
+        else if (operation.compare("reverse") == false) {
+            FrameSequence::reversePrintImage(width,height, name);
+        }
+        else if (operation.compare("revinvert") == false) {
+            FrameSequence::reversePrintImage(width,height, name);
+        }
+        
     }
  
     void FrameSequence::none(int x, int y, int width, int height) {
@@ -139,10 +214,9 @@ namespace GNSSEN002 {
         imageSequence.push_back(tracP);
     }
  
-    void FrameSequence::reverse(int width, int height, std::string name) {
+    void FrameSequence::reversePrintImage(int width, int height, std::string name) {
  
         std::fstream out;  
-       // std::string strCount = std::to_string(count);
         int fnew =0;
         for (int f = imageSequence.size()-1; f >=0; f--) {
  
@@ -168,97 +242,7 @@ namespace GNSSEN002 {
             fnew++;
         };
  
-    }
- 
-    void FrameSequence::tracjectory(int x1, int y1, int x2, int y2, int width, int height, std::string operation, std::string name) {
- 
-        float g = ((float)(y2-y1))/((float)(x2-x1));
-        std::cout << "x1: " << x1 << " y1: " << y1 << " x2: " << x2 << " y2: " << y2 << " g: " << g << std::endl;
-        int count = 0;
-        int op = 0;
- 
-        if (operation.compare("none") == false) {
-            op=1;
-        }
-        else if (operation.compare("invert") == false) {
-            op=2;
-        }
-        else if (operation.compare("reverse") == false) {
-            op=1;
-        }
-        else if (operation.compare("revinvert") == false) {
-            op=2;
-        }
-
-        float ystart = y1;
-        int slope = 0;
-
-        if (std::fabs(g) < 1.0) {
-
-            if (x2 < x1)
-                slope = -1;
-            else
-                slope = 1;
-            
-            for (int x =x1; x < x2; x = x + slope) {
-                ystart = ystart + g; 
-                switch (op) {
-                    case 1: { 
-                        std::cout << "x: " << x << " y: " << std::round(ystart) << " width: " << width << " height: " << height << std::endl;;
-                        FrameSequence::none(x, std::round(ystart), width, height);
-                        count++;
-                        break;
-                    }
-                    case 2: {
-                        //invert
-                        std::cout << "x: " << x << " y: " << std::round(ystart) << " width: " << width << " height: " << height << std::endl;
-                        FrameSequence::invert(x, std::round(y1), width, height);
-                        count++;
-                        break;
-                    }
-                }
-            }
-
-
-        }
-        else {
-            if (y2 < y1) 
-                slope = -1;
-            else    
-                slope = 1;
-            for (int y=y1; y < y2; y = y +(slope)) {
-                x1+=(1/g);
-                switch (op) {
-                    case 1: { 
-                        //none
-                        FrameSequence::none(std::round(x1), y, width, height);
-                        count++;
-                        break;
-                    }
-                    case 2: {
-                        //invert
-                        FrameSequence::invert(std::round(x1), y, width, height);
-                        count++;
-                        break;
-                    }
-                };
-            }
-        }
-
-        if (operation.compare("none") == false) {
-            FrameSequence::printImage(width,height, name);
-        }
-        else if (operation.compare("invert") == false) {
-            FrameSequence::printImage(width,height, name);          
-        }
-        else if (operation.compare("reverse") == false) {
-            FrameSequence::reverse(width,height, name);
-        }
-        else if (operation.compare("revinvert") == false) {
-            FrameSequence::reverse(width,height, name);
-        }
-        
-    }
+    }    
  
     void FrameSequence::printImage(int width, int height, std::string name) {
        
@@ -296,9 +280,9 @@ namespace GNSSEN002 {
         delete [] mImage;
  
         int isSize = imageSequence.size();
-   //     for (int h = 0; h < isSize; ++h) {
-     //       for (int k = 0; k < )
-       // }
+        for (int h = 0; h < isSize; ++h) {
+            delete [] imageSequence[h];
+        delete [] imageSquence;       
     }
     
 }

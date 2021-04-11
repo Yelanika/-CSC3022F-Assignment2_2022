@@ -1,6 +1,14 @@
+/**
+ * Yelanika Gunasekara
+ * GNSSEN002
+ * FrameSequence.h
+ * This is the header file for the FrameSequence class.
+ * **/
+
 #ifndef _FrameSequence_h
 #define _FrameSequence_h
 #include <string>
+#include <vector>
 
 namespace GNSSEN002 {
     class FrameSequence {
@@ -8,10 +16,10 @@ namespace GNSSEN002 {
         public: 
             ~FrameSequence();
             void getImageDimensions(std::string pgmFile);
-            void invert(int x, int y, int width, int height);
-            void reverse(int width, int height, std::string name);
+            void tracjectory(std::vector<int> x, std::vector<int> y, int width, int height, std::string operation, std::string name);
+            void invert(int x, int y, int width, int height);            
             void none(int x, int y, int width, int height);
-            void tracjectory(int x1, int y1, int x2, int y2, int width, int height, std::string operation, std::string name);
+            void reversePrintImage(int width, int height, std::string name);
             void printImage(int width, int height, std::string name);
 
     };
