@@ -64,68 +64,29 @@ int main (int argc, char *argv[]) {
                     iss >> height; 
                     break;
                 }
-              //  default: {
-                //    std::cout << "nothing happens" << std::endl;
-                  //  break;
-                //}
             }
         }
 
-
-       // std::cout << "10" << std::endl;
         int i = 10;
-       // std::cout << argc << std::endl;
+
         while (i < argc) {
             i++;
-          //  std::cout << i << argv[i] << std::endl;
+
             operation.push_back(argv[i]);
-          /*  if (argv[i] == "none")
-                operation.push_back(1);
-            else if (argv[i] == "invert"){
-                operation.push_back(2);
-                std::cout << "GETS HERE" << std::endl;
-            }
-            else if (argv[i] == "reverse")
-                operation.push_back(3);
-            else if (argv[i] == "revinvert")
-                operation.push_back(4);*/
-            i++;
-          //  std::cout << i << argv[i] << std::endl;
+            i++;;
+
             name.push_back(argv[i]);
             i++;
         }
-
-        // std::cout << "filename: " << pgmFile << std::endl;
-
-        // std::cout << "x1: " << x1 << std::endl;
-        // std::cout << "y1: " << y1 << std::endl;
-        // std::cout << "x2: " << x2 << std::endl;
-        // std::cout << "y2: " << y2 << std::endl;
-
-        // std::cout << "width: " << width << std::endl;
-        // std::cout << "height: " << height << std::endl;
-
-        //  std::cout << "Op size: " << name.size() << std::endl;
-   
-        //     for (int j = 0; j < name.size(); j++) {
-        //         std::cout << "Operation: " << operation[j] << std::endl;
-        //         std::cout << "Name: " << name[j] << std::endl;
-        //     }
         
     }
 
-    //creating an object of the FrameSequence class
-    GNSSEN002::FrameSequence FSObject;
-   // GNSSEN002::FrameSequence::getImageDimensions(pgmFile);
-    //sending through the name of the pgm image file to extract dimensions and extract image  
+    GNSSEN002::FrameSequence FSObject; 
     FSObject.getImageDimensions(pgmFile);
-   // FSObject.invert();
-    //FSObject.reverse();
-    //GNSSEN002::FrameSequence::
-   
-        for (int i = 0; i < operation.size(); i++) {
-            FSObject.tracjectory(x1,y1,x2,y2,width,height, operation[i], name[i]);
-        }
+
+    for (int i = 0; i < operation.size(); i++) {
+        FSObject.tracjectory(x1,y1,x2,y2,width,height, operation[i], name[i]);
+    }
 
     return 0;
 
