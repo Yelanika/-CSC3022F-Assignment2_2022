@@ -1,3 +1,7 @@
+#Yelanika Gunasekara
+#GNSSEN002
+#Makefile
+
 CC = g++
 CCFLAGS = -std=c++2a
 
@@ -12,5 +16,5 @@ FrameSequence.o: FrameSequence.cpp FrameSequence.h
 
 clean:
 	rm -f *.o
+	rm  *.pgm
 	rm extractor.exe
-	rm -f S*.pgm

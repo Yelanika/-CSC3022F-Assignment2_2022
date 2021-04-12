@@ -16,15 +16,18 @@
  
 namespace GNSSEN002 {
  
-    int row = 0;
-    int col = 0;
     unsigned char ** mImage = nullptr;
     std::vector<unsigned char **> imageSequence;
- 
-    //getting the dimensions of the image we are reading in
+    int row;
+    int col;
+    int height;
+
+    /***
+     * This function reads the pgm file in binary and gets the total rows and columns of the 
+     * file.
+     * 
+     * **/
     void FrameSequence::getImageDimensions(std::string pgmFile) {
- 
-        std::cout << "filename: " << pgmFile << std::endl;
  
         std::ifstream in(pgmFile, std::ios::in | std::ios::binary);
         std::string checkDigitStr = "";
@@ -59,34 +62,54 @@ namespace GNSSEN002 {
  
             in >> twofivefive >> std::ws;
  
-            mImage = new unsigned char*[col];
-            for (int i =0; i < col; ++i) {
+            mImage = new unsigned char*[row];
+            for (int i =0; i < row; ++i) {
                     
-                mImage[i] = new unsigned char[row];
-                for (int j =0; j < row; ++j ) {
+                mImage[i] = new unsigned char[col];
+                for (int j =0; j < col; ++j ) {
                     in.read((char*)&mImage[i][j],1);
                 }
             }
         }
- 
+        
         in.close();
+
+            // std::ofstream out;
+
+           
+            // out.open("mImage.pgm", std::ios::out | std::ios::binary);
+            // out << "P5" << std::endl;
+            // out << col << " " << row << std::endl;
+            // out << "255" << std::endl;
+            
+            
+            // for (int i = 0; i < row; ++i) {
+            //     for (int j =0; j < col; ++j ) {
+            //         out.write((char *)&mImage[i][j],1);              
+            //     }
+            // }
+ 
+            // out.close();
     }
 
-    void FrameSequence::tracjectory(std::vector<int> x, std::vector<int> y, int width, int height, std::string operation, std::string name) {
- 
+    /***
+     * 
+     * This function writes to the imageSquence pointer.
+     * The various -w flag operations are implmented.
+     * Files are proudced using imageSequence, per frame in the frame trajectory.
+     * 
+     * **/
+    void FrameSequence::tracjectory(std::vector<int> x, std::vector<int> y, int width, int height, std::string operation, std::string name) { 
+       
         for (int d = 0; d < x.size()-1; d++ ) {
 
-          //  std::cout << "d here" << std::endl;
             int x1 = x[d];
             int x2 = x[d+1];
-           // std::cout << "x here" << std::endl;
+            
             int y1 = y[d];
             int y2 = y[d+1];
-            std::cout << d << std::endl;
-
 
             float g = ((float)(y2-y1))/((float)(x2-x1));
-            //std::cout << "x1: " << x1 << " y1: " << y1 << " x2: " << x2 << " y2: " << y2 << " g: " << g << std::endl;
             int count = 0;
             int op = 0;
     
@@ -108,48 +131,78 @@ namespace GNSSEN002 {
 
             if (std::fabs(g) < 1.0) {
 
-                if (x2 < x1)
-                    slope = -1;
-                else
-                    slope = 1;
-                
-                for (int x =x1; x < x2; x = x + slope) {
-                    ystart = ystart + g; 
-                    switch (op) {
-                        case 1: { 
-                            FrameSequence::none(x, std::round(ystart), width, height);
-                            count++;
-                            break;
-                        }
-                        case 2: {
-                            FrameSequence::invert(x, std::round(y1), width, height);
-                            count++;
-                            break;
-                        }
+                if (x2 < x1) {
+                    for (int x=x1; x >= x2; x--) {       
+                        ystart = ystart + g; 
+                        switch (op) {
+                            case 1: { 
+                                FrameSequence::none(x, std::round(ystart), width, height);
+                                count++;
+                                break;
+                            }
+                            case 2: {
+                                FrameSequence::invert(x, std::round(y1), width, height);
+                                count++;
+                                break;
+                            }
+                        };
                     }
+                }
+                else{
+                    for (int x=x1; x < x2; x++) {       
+                        ystart = ystart + g; 
+                        switch (op) {
+                            case 1: { 
+                                FrameSequence::none(x, std::round(ystart), width, height);
+                                count++;
+                                break;
+                            }
+                            case 2: {
+                                FrameSequence::invert(x, std::round(y1), width, height);
+                                count++;
+                                break;
+                            }
+                        };
+                    }
+
                 }
 
 
             }
             else {
-                if (y2 < y1) 
-                    slope = -1;
-                else    
-                    slope = 1;
-                for (int y=y1; y < y2; y = y +(slope)) {
-                    x1+=(1/g);
-                    switch (op) {
-                        case 1: { 
-                            FrameSequence::none(std::round(x1), y, width, height);
-                            count++;
-                            break;
-                        }
-                        case 2: {
-                            FrameSequence::invert(std::round(x1), y, width, height);
-                            count++;
-                            break;
-                        }
-                    };
+                if (y2 < y1) {
+                    for (int y=y1; y >= y2; y--) {
+                        x1+=(1/g);
+                        switch (op) {
+                            case 1: { 
+                                FrameSequence::none(std::round(x1), y, width, height);
+                                count++;
+                                break;
+                            }
+                            case 2: {
+                                FrameSequence::invert(std::round(x1), y, width, height);
+                                count++;
+                                break;
+                            }
+                        };
+                    }
+                }
+                else {
+                    for (int y=y1; y < y2; y++) {
+                        x1+=(1/g);
+                        switch (op) {
+                            case 1: { 
+                                FrameSequence::none(std::round(x1), y, width, height);
+                                count++;
+                                break;
+                            }
+                            case 2: {
+                                FrameSequence::invert(std::round(x1), y, width, height);
+                                count++;
+                                break;
+                            }
+                        };
+                    }
                 }
             }
         }
@@ -168,37 +221,50 @@ namespace GNSSEN002 {
         }
         
     }
- 
+
+    /***
+     * 
+     * the none -w flag method is implmented here.
+     * The frame is added to imageSequence.
+     * 
+     * **/ 
     void FrameSequence::none(int x, int y, int width, int height) {
  
         unsigned char ** tracP = nullptr;
  
         int xCount = x;
         int yCount = y;
-        tracP = new unsigned char*[width];
-        for (int i = 0; i < width; ++i) {
+        tracP = new unsigned char*[height];
+        for (int i = 0; i < height; ++i) {
             xCount++;
-            tracP[i] = new unsigned char[height];
-            for (int j =0; j < height; ++j ) {
+            tracP[i] = new unsigned char[width];
+            for (int j =0; j < width; ++j ) {
                 yCount++;
-                tracP[i][j] = mImage[xCount][yCount];                              
+                tracP[i][j] = (unsigned char) mImage[xCount][yCount];                              
             }
+            yCount =y;
         }
  
         imageSequence.push_back(tracP);
     }
  
+    /***
+     * 
+     * The -w flag invert method is implmented here.
+     * The frame is added to imageSequence.
+     * 
+     * **/
     void FrameSequence::invert(int x, int y, int width, int height) {
         
         unsigned char ** tracP = nullptr;
  
         int xCount = x;
         int yCount = y;
-        tracP = new unsigned char*[width];
-        for (int i = 0; i < width; ++i) {
+        tracP = new unsigned char*[height];
+        for (int i = 0; i < height; ++i) {
             xCount++;
-            tracP[i] = new unsigned char[height];
-            for (int j =0; j < height; ++j ) {
+            tracP[i] = new unsigned char[width];
+            for (int j =0; j < width; ++j ) {
                 yCount++;
                 int p = 255;
                 int pixel = 255 - (int)(mImage[xCount][yCount]);
@@ -209,29 +275,46 @@ namespace GNSSEN002 {
  
                 tracP[i][j] = *chptr;                              
             }
+            yCount =y;
         }
  
         imageSequence.push_back(tracP);
     }
  
+    /***
+     * 
+     * The -w flag reverse is printed here.
+     * Each frame is extracted in reverse and the filed is labelled accordingly.
+     * The frames are extracted from imageSequence.
+     * 
+     * **/
     void FrameSequence::reversePrintImage(int width, int height, std::string name) {
  
-        std::fstream out;  
+        std::ofstream out;  
         int fnew =0;
         for (int f = imageSequence.size()-1; f >=0; f--) {
  
             std::string fnum = std::to_string(fnew);
+            int flen = fnum.length();
+            std::string temp;
+            
+            if (flen < 5) {
+                int dif = 4 - flen;
+                for (int w = 0; w < dif; w++) {
+                    temp += "0";
+                }
+                fnum = temp + fnum;
+            }
+
             std::string filename = name + fnum + ".pgm";
             out.open(filename, std::ios::out | std::ios::binary);
             out << "P5" << std::endl;
-            out << "#The output file of the in file" << std::endl;
             out << width << " " << height << std::endl;
             out << "255" << std::endl;
             
-            
-            for (int i = 0; i < width; ++i) {
-                for (int j =0; j < height; ++j ) {
- 
+            for (int i = 0; i < height; ++i) {
+                for (int j =0; j < width; ++j ) {
+        
                     unsigned char * ptr = nullptr;
                     ptr = &imageSequence[f][i][j];
                     out.write((char *)ptr,1);              
@@ -244,24 +327,41 @@ namespace GNSSEN002 {
  
     }    
  
+    /***
+     * 
+     * The -w flag reverse is printed here.
+     * Each frame is extracted in reverse and the filed is labelled accordingly.
+     * The frames are extracted from imageSequence.
+     * 
+     * ***/
     void FrameSequence::printImage(int width, int height, std::string name) {
        
-        std::fstream out;  
-       // std::string strCount = std::to_string(count);
+        std::ofstream out;  
  
         for (int f =0; f < imageSequence.size(); f++) {
  
             std::string fnum = std::to_string(f);
+            int flen = fnum.length();
+            std::string temp;
+            
+            if (flen < 5) {
+                int dif = 4 - flen;
+                for (int w = 0; w < dif; w++) {
+                    temp += "0";
+                }
+                fnum = temp + fnum;
+            }
+
             std::string filename = name + fnum + ".pgm";
             out.open(filename, std::ios::out | std::ios::binary);
             out << "P5" << std::endl;
-            out << "#The output file of the in file" << std::endl;
             out << width << " " << height << std::endl;
             out << "255" << std::endl;
             
-            
-            for (int i = 0; i < width; ++i) {
-                for (int j =0; j < height; ++j ) {
+            std::cout << width << " gets here " << height << std::endl;
+
+            for (int i = 0; i < height; ++i) {
+                for (int j =0; j < width; ++j ) {
  
                     unsigned char * ptr = nullptr;
                     ptr = &imageSequence[f][i][j];
@@ -273,16 +373,22 @@ namespace GNSSEN002 {
         }
     }
  
+    /**
+     * Destructor.
+     * 
+     * **/
     FrameSequence::~FrameSequence() {
-        for (int i = 0; i < col; ++i) {
+        for (int i = 0; i < row; ++i) {
             delete [] mImage[i];
         }
         delete [] mImage;
- 
+
         int isSize = imageSequence.size();
         for (int h = 0; h < isSize; ++h) {
-            delete [] imageSequence[h];
-        delete [] imageSquence;       
+            for (int r = 0; r < height; r++) {
+                delete [] imageSequence[h][r];
+            }
+        }
     }
     
 }

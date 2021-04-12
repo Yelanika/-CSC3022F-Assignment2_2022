@@ -71,13 +71,11 @@ int main (int argc, char *argv[]) {
             }
             //if the -t flag is found
             else if (flag.compare("-t") == 0) {
-                 std::cout << "-t" << std::endl;
                 for (int s = 0; s < 2; s++) {
 
                     e++;
                     std::istringstream iss2(argv[e]);
                     iss2 >> xV;
-                   //  std::cout << argv[e] << std::endl;
                     x.push_back(xV);
 
                     e++;
@@ -114,16 +112,17 @@ int main (int argc, char *argv[]) {
             }
 
         }
+
+        GNSSEN002::FrameSequence FSObject; 
+        FSObject.getImageDimensions(pgmFile);
+
+
+        for (int i = 0; i < operation.size(); i++) {        
+            FSObject.tracjectory(x,y,width,height, operation[i], name[i]);
+        }
+
         
-    }
-
-    GNSSEN002::FrameSequence FSObject; 
-    FSObject.getImageDimensions(pgmFile);
-
-
-    for (int i = 0; i < operation.size(); i++) {
-        FSObject.tracjectory(x,y,width,height, operation[i], name[i]);
-    }
+    }   
 
     return 0;
 
