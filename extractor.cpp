@@ -119,9 +119,9 @@ int main (int argc, char *argv[]) {
         FSObject.getImageDimensions(pgmFile);
 
 
-        // for (int i = 0; i < operation.size(); i++) {        
-        //     FSObject.tracjectory(x,y,width,height, operation[i], name[i]);
-        // }
+        for (int i = 0; i < operation.size(); i++) {        
+            FSObject.tracjectory(x,y,width,height, operation[i], name[i]);
+        }
 
         
     }   

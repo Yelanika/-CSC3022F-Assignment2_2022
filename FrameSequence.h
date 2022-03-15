@@ -23,7 +23,7 @@ namespace GNSSEN002 {
         public: 
             FrameSequence();
             FrameSequence(int row, int col, unsigned char **mImage, std::vector<unsigned char **> imageSequence, int height);
-            //~FrameSequence();   //destructor 
+            ~FrameSequence();   //destructor 
            // int getWidth(int width);
             void getImageDimensions(std::string pgmFile);
 
