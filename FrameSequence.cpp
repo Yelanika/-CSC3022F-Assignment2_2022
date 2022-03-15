@@ -18,11 +18,11 @@ namespace GNSSEN002 {
  
     
     
-    unsigned char ** mImage = nullptr;
-    std::vector<unsigned char **> imageSequence;
-    int row;
-    int col;
-    int height;
+    // unsigned char ** mImage = nullptr;
+    // std::vector<unsigned char **> imageSequence;
+    // int row;
+    // int col;
+    // int height;
 
    /***
      * Default Constructor
@@ -88,24 +88,24 @@ namespace GNSSEN002 {
             }
         }
         
-        in.close();
+        // in.close();
 
-            std::ofstream out;
+        //     std::ofstream out;
 
            
-            out.open("mImage.pgm", std::ios::out | std::ios::binary);
-            out << "P5" << std::endl;
-            out << col << " " << row << std::endl;
-            out << "255" << std::endl;
+        //     out.open("mImage.pgm", std::ios::out | std::ios::binary);
+        //     out << "P5" << std::endl;
+        //     out << col << " " << row << std::endl;
+        //     out << "255" << std::endl;
             
             
-            for (int i = 0; i < row; ++i) {
-                for (int j =0; j < col; ++j ) {
-                    out.write((char *)&mImage[i][j],1);              
-                }
-            }
+        //     for (int i = 0; i < row; ++i) {
+        //         for (int j =0; j < col; ++j ) {
+        //             out.write((char *)&mImage[i][j],1);              
+        //         }
+        //     }
  
-            out.close();
+        //     out.close();
     }
 
     /***

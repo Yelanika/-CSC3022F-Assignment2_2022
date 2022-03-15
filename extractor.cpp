@@ -60,12 +60,22 @@ int main (int argc, char *argv[]) {
                     e++;
                     std::istringstream iss2(argv[e]);
                     iss2 >> xV;
-                    x.push_back(xV);
+                    if (xV < 0) {
+                        std::cout << "The frame co-ordinates you have entered is incorrect. Please try again.";
+                        return 0;
+                    }
+                    else                    
+                        x.push_back(xV);
 
                     e++;
                     std::istringstream iss3(argv[e]);
                     iss3 >> yV;
-                    y.push_back(yV);
+                    if (yV < 0) {
+                        std::cout << "The frame co-ordinates you have entered is incorrect. Please try again.";
+                        return 0;
+                    }
+                    else 
+                        y.push_back(yV);
                 }
                 
             }
@@ -76,12 +86,23 @@ int main (int argc, char *argv[]) {
                     e++;
                     std::istringstream iss2(argv[e]);
                     iss2 >> xV;
-                    x.push_back(xV);
+                    //std::cout << xV << std::endl;
+                    if (int(xV) < 0) {
+                        std::cout << "The frame co-ordinates you have entered is incorrect. Please try again." << std::endl;
+                        return 0;
+                    }
+                    else 
+                        x.push_back(xV);
 
                     e++;
                     std::istringstream iss3(argv[e]);
                     iss3 >> yV;
-                    y.push_back(yV);
+                    if (xV < 0) {
+                        std::cout << "The frame co-ordinates you have entered is incorrect. Please try again." << std::endl;
+                        return 0;
+                    }
+                    else 
+                        y.push_back(yV);
                 }
             }
 
@@ -95,6 +116,12 @@ int main (int argc, char *argv[]) {
             e++;
             std::istringstream iss3(argv[e]);
             iss3 >> height;
+
+            //Error checking the width and height of frame 
+            if ((height < 0) || ( width < 0)) {
+                std::cout << "The frame size you have entered is incorrect. Please try again." << std::endl;
+                return 0;
+            }
 
             //the -w flag data is read
             for (int s = e; s < argc; s++ ) {
