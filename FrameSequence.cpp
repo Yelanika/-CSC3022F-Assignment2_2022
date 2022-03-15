@@ -35,7 +35,7 @@ namespace GNSSEN002 {
      * Custom Constructor
      * 
      * **/
-    FrameSequence::FrameSequence(int row, int col, unsigned char **mImage, std::vector<unsigned char **> imageSequence, int height) : row(0), col(0), mImage(nullptr), imageSequence(NULL), height(0) {}
+    FrameSequence::FrameSequence(int row, int col, unsigned char **mImage, std::vector<unsigned char **> imageSequence, int height) : row(row), col(col), mImage(nullptr), imageSequence(NULL), height(0) {}
 
     /***
      * 
@@ -90,22 +90,22 @@ namespace GNSSEN002 {
         
         in.close();
 
-            // std::ofstream out;
+            std::ofstream out;
 
            
-            // out.open("mImage.pgm", std::ios::out | std::ios::binary);
-            // out << "P5" << std::endl;
-            // out << col << " " << row << std::endl;
-            // out << "255" << std::endl;
+            out.open("mImage.pgm", std::ios::out | std::ios::binary);
+            out << "P5" << std::endl;
+            out << col << " " << row << std::endl;
+            out << "255" << std::endl;
             
             
-            // for (int i = 0; i < row; ++i) {
-            //     for (int j =0; j < col; ++j ) {
-            //         out.write((char *)&mImage[i][j],1);              
-            //     }
-            // }
+            for (int i = 0; i < row; ++i) {
+                for (int j =0; j < col; ++j ) {
+                    out.write((char *)&mImage[i][j],1);              
+                }
+            }
  
-            // out.close();
+            out.close();
     }
 
     /***
