@@ -20,22 +20,25 @@ namespace GNSSEN002 {
      * Default Constructor
      * 
      * **/
-    FrameSequence::FrameSequence() : row(0), col(0), mImage(nullptr), imageSequence(NULL), height(0) {}
+    FrameSequence::FrameSequence() : row(0), col(0), mImage(nullptr), imageSequence(), height(0) {}
 
     /***
      * 
      * Custom Constructor
      * 
      * **/
-    FrameSequence::FrameSequence(int row, int col, unsigned char **mImage, std::vector<unsigned char **> imageSequence, int height) : row(row), col(col), mImage(nullptr), imageSequence(NULL), height(height) {}
+    FrameSequence::FrameSequence(int row, int col, unsigned char **mImage, std::vector<unsigned char **> imageSequence, int height) : row(row), col(col), mImage(nullptr), imageSequence(), height(height) {}
 
     /***
      * 
      * This function reads the pgm file in binary and gets the total rows and columns of the 
      * file.
+     * The function returns bool value:
+     *  - true - if file read completely
+     *  - false - if file is not read or not read completely
      * 
      * **/
-    void FrameSequence::getImageDimensions(std::string pgmFile) {
+    bool FrameSequence::getImageDimensions(std::string pgmFile) {
  
         std::ifstream in(pgmFile, std::ios::in | std::ios::binary);
         std::string checkDigitStr = "";
@@ -78,7 +81,11 @@ namespace GNSSEN002 {
                     in.read((char*)&mImage[i][j],1);
                 }
             }
+
+            return true;
         }
+
+        return false;
     }
 
     /***
@@ -91,18 +98,19 @@ namespace GNSSEN002 {
     void FrameSequence::tracjectory(std::vector<int> x, std::vector<int> y, int width, int height, std::string operation, std::string name) { 
        
         for (int d = 0; d < x.size()-1; d++ ) {
-
+            
+            //calculating the new points of the frame 
             int x1 = x[d];
             int x2 = x[d+1];
             
             int y1 = y[d];
             int y2 = y[d+1];
 
+            //Calculating the threshold 
             float g = ((float)(y2-y1))/((float)(x2-x1));
-            int count = 0;
             int op = 0;
     
-            if (operation.compare("none") == false) {
+            if (operation.compare("none") == false) {       //Using operations from input - to decide which functions to implement
                 op=1;
             }
             else if (operation.compare("invert") == false) {
@@ -118,7 +126,7 @@ namespace GNSSEN002 {
             float ystart = y1;
             int slope = 0;
 
-            if (std::fabs(g) < 1.0) {
+            if (std::fabs(g) < 1.0) {           //if the absolute value of the threshold is smaller than 1
 
                 if (x2 < x1) {
                     for (int x=x1; x >= x2; x--) {       
@@ -126,12 +134,10 @@ namespace GNSSEN002 {
                         switch (op) {
                             case 1: { 
                                 FrameSequence::none(x, std::round(ystart), width, height);
-                                count++;
                                 break;
                             }
                             case 2: {
                                 FrameSequence::invert(x, std::round(y1), width, height);
-                                count++;
                                 break;
                             }
                         };
@@ -143,12 +149,10 @@ namespace GNSSEN002 {
                         switch (op) {
                             case 1: { 
                                 FrameSequence::none(x, std::round(ystart), width, height);
-                                count++;
                                 break;
                             }
                             case 2: {
                                 FrameSequence::invert(x, std::round(y1), width, height);
-                                count++;
                                 break;
                             }
                         };
@@ -158,19 +162,17 @@ namespace GNSSEN002 {
 
 
             }
-            else {
+            else {          //if the asbsolute value of the threshold is greater than 1 
                 if (y2 < y1) {
                     for (int y=y1; y >= y2; y--) {
                         x1+=(1/g);
                         switch (op) {
                             case 1: { 
                                 FrameSequence::none(std::round(x1), y, width, height);
-                                count++;
                                 break;
                             }
                             case 2: {
                                 FrameSequence::invert(std::round(x1), y, width, height);
-                                count++;
                                 break;
                             }
                         };
@@ -182,12 +184,10 @@ namespace GNSSEN002 {
                         switch (op) {
                             case 1: { 
                                 FrameSequence::none(std::round(x1), y, width, height);
-                                count++;
                                 break;
                             }
                             case 2: {
                                 FrameSequence::invert(std::round(x1), y, width, height);
-                                count++;
                                 break;
                             }
                         };
@@ -195,7 +195,7 @@ namespace GNSSEN002 {
                 }
             }
         }
-
+        //Using operations from input - to decide which functions to implement
         if (operation.compare("none") == false) {
             FrameSequence::printImage(width,height, name);
         }
@@ -273,7 +273,7 @@ namespace GNSSEN002 {
     /***
      * 
      * The -w flag reverse is printed here.
-     * Each frame is extracted in reverse and the filed is labelled accordingly.
+     * Each frame is extracted in reverse and the files are labelled accordingly.
      * The frames are extracted from imageSequence.
      * 
      * **/
@@ -317,9 +317,8 @@ namespace GNSSEN002 {
     }    
  
     /***
-     * 
-     * The -w flag reverse is printed here.
-     * Each frame is extracted in reverse and the filed is labelled accordingly.
+     *
+     * Each frame is extracted and the files are labelled accordingly.
      * The frames are extracted from imageSequence.
      * 
      * ***/
