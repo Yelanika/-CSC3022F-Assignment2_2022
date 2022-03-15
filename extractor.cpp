@@ -113,7 +113,9 @@ int main (int argc, char *argv[]) {
 
         }
 
-        GNSSEN002::FrameSequence FSObject; 
+        //Invokes the default constructor 
+        GNSSEN002::FrameSequence FSObject;
+        //Calls the getImageDimensions Method 
         FSObject.getImageDimensions(pgmFile);
 
 
