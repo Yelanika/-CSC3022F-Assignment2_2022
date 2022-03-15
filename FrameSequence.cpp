@@ -17,17 +17,18 @@
 namespace GNSSEN002 {
 
    /***
-     * Default Constructor
+     * Default Constructor:
+     * Instantiates neccessary variables. 
      * 
      * **/
-    FrameSequence::FrameSequence() : row(0), col(0), mImage(nullptr), imageSequence(), height(0) {}
+    FrameSequence::FrameSequence(void) : row(0), col(0), mImage(nullptr), imageSequence(), height(0) {}
 
     /***
      * 
      * Custom Constructor
      * 
      * **/
-    FrameSequence::FrameSequence(int row, int col, unsigned char **mImage, std::vector<unsigned char **> imageSequence, int height) : row(row), col(col), mImage(nullptr), imageSequence(), height(height) {}
+    //FrameSequence::FrameSequence(int row, int col, unsigned char **mImage, std::vector<unsigned char **> imageSequence, int height) : row(row), col(col), mImage(nullptr), imageSequence(), height(height) {}
 
     /***
      * 
