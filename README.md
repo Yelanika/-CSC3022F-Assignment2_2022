@@ -7,6 +7,7 @@ FrameSequence.h:
 FrameSequence.cpp:
   - This is the source file where in which the methods for the FrameSequence Class is implemented.
   - The imageSequence vector is implemented in this file.
+  - Important Note: Less frames are produced when the frame edges hits the sides of the input image. 
 
 extractor.cpp:
 - This is the driver source file which extracts the data from the command line.
