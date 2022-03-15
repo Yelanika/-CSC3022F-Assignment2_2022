@@ -60,7 +60,7 @@ int main (int argc, char *argv[]) {
                     e++;
                     std::istringstream iss2(argv[e]);
                     iss2 >> xV;
-                    if (xV < 0) {
+                    if (xV < 0) {           //Error Check
                         std::cout << "The frame co-ordinates you have entered is incorrect. Please try again.";
                         return 0;
                     }
@@ -70,7 +70,7 @@ int main (int argc, char *argv[]) {
                     e++;
                     std::istringstream iss3(argv[e]);
                     iss3 >> yV;
-                    if (yV < 0) {
+                    if (yV < 0) {           //Error Check
                         std::cout << "The frame co-ordinates you have entered is incorrect. Please try again.";
                         return 0;
                     }
@@ -86,8 +86,7 @@ int main (int argc, char *argv[]) {
                     e++;
                     std::istringstream iss2(argv[e]);
                     iss2 >> xV;
-                    //std::cout << xV << std::endl;
-                    if (int(xV) < 0) {
+                    if (int(xV) < 0) {          //Error Check
                         std::cout << "The frame co-ordinates you have entered is incorrect. Please try again." << std::endl;
                         return 0;
                     }
@@ -97,7 +96,7 @@ int main (int argc, char *argv[]) {
                     e++;
                     std::istringstream iss3(argv[e]);
                     iss3 >> yV;
-                    if (xV < 0) {
+                    if (xV < 0) {       //Error Check
                         std::cout << "The frame co-ordinates you have entered is incorrect. Please try again." << std::endl;
                         return 0;
                     }
@@ -142,13 +141,15 @@ int main (int argc, char *argv[]) {
 
         //Invokes the default constructor 
         GNSSEN002::FrameSequence FSObject;
-        //Calls the getImageDimensions Method 
-        FSObject.getImageDimensions(pgmFile);
+        //Calls the getImageDimensions Method which returns true if file copied completely else false
+        bool gotFile = FSObject.getImageDimensions(pgmFile);
 
-
-        for (int i = 0; i < operation.size(); i++) {        
-            FSObject.tracjectory(x,y,width,height, operation[i], name[i]);
-        }
+        //if file has been retrieved completely - continue with processing data 
+        if (gotFile) {
+            for (int i = 0; i < operation.size(); i++) {        
+                FSObject.tracjectory(x,y,width,height, operation[i], name[i]);
+            }
+        } //else end proggram
 
         
     }   
