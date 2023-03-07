@@ -149,9 +149,7 @@ int main (int argc, char *argv[]) {
             for (int i = 0; i < operation.size(); i++) {        
                 FSObject.tracjectory(x,y,width,height, operation[i], name[i]);
             }
-        } //else end proggram
-
-        
+        } //else end program        
     }   
 
     return 0;
