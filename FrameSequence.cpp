@@ -106,8 +106,8 @@ namespace GNSSEN002 {
             
             int y1 = y[d];
             int y2 = y[d+1];
-            std::cout << "x1: " << x1 << " x2: " << x2 << std::endl;
-            std::cout << "y1: " << y1 << " y2: " << y2 << std::endl;
+            // std::cout << "x1: " << x1 << " x2: " << x2 << std::endl;
+            // std::cout << "y1: " << y1 << " y2: " << y2 << std::endl;
             //Calculating the threshold 
             float g = ((float)(y2-y1))/((float)(x2-x1));
             int op = 0;
@@ -126,7 +126,7 @@ namespace GNSSEN002 {
             }
 
             float ystart = y1;
-            int slope = 0;
+            //int slope = 0;
 
             if (std::fabs(g) < 1.0) {           //if the absolute value of the threshold is smaller than 1
 
@@ -289,7 +289,7 @@ namespace GNSSEN002 {
             int flen = fnum.length();
             std::string temp;
             
-            if (flen < 5) {
+            if (flen < 5) {     //allocating that the name of the file should be 4 values
                 int dif = 4 - flen;
                 for (int w = 0; w < dif; w++) {
                     temp += "0";
@@ -315,6 +315,15 @@ namespace GNSSEN002 {
             out.close();
             fnew++;
         };
+        std::cout << "reverse Print Image: before" << std::endl;
+        int isSize = imageSequence.size();
+        for (int h = 0; h < isSize; ++h) {
+            for (int r = 0; r < height; r++) {
+                imageSequence[h][r] = nullptr;
+            }
+        }
+        std::cout << "reverse Print Image: after" << std::endl;
+        std::cout << imageSequence.size() << std::endl;
  
     }    
  
@@ -359,6 +368,15 @@ namespace GNSSEN002 {
  
             out.close();
         }
+        std::cout << "Print Image: before" << std::endl;
+        int isSize = imageSequence.size();
+        for (int h = 0; h < isSize; ++h) {
+            for (int r = 0; r < height; r++) {
+                imageSequence[h][r] = nullptr;
+            }
+        }
+        std::cout << "Print Image: after" << std::endl;
+        std::cout << imageSequence.size() << std::endl;
     }
  
     // /**
