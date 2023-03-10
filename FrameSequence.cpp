@@ -247,6 +247,7 @@ namespace GNSSEN002 {
      * **/
     void FrameSequence::invert(int x, int y, int width, int height) {
         
+        std::cout << "ERROR" << std::endl;
         unsigned char ** tracP = nullptr;
  
         int xCount = x;
@@ -319,8 +320,12 @@ namespace GNSSEN002 {
         int isSize = imageSequence.size();
         for (int h = 0; h < isSize; ++h) {
             for (int r = 0; r < height; r++) {
-                imageSequence[h][r] = nullptr;
+                for (int w = 0; w < width; ++w)
+                    imageSequence[h][r][w] = 0;
+                imageSequence[h][r] = nullptr; 
+                    
             }
+            imageSequence.pop_back();
         }
         std::cout << "reverse Print Image: after" << std::endl;
         std::cout << imageSequence.size() << std::endl;
@@ -372,8 +377,12 @@ namespace GNSSEN002 {
         int isSize = imageSequence.size();
         for (int h = 0; h < isSize; ++h) {
             for (int r = 0; r < height; r++) {
+                for (int w = 0; w < width; ++w)
+                   imageSequence[h][r][w] = 0;
+
                 imageSequence[h][r] = nullptr;
             }
+            imageSequence.pop_back();
         }
         std::cout << "Print Image: after" << std::endl;
         std::cout << imageSequence.size() << std::endl;

@@ -48,7 +48,7 @@ int main (int argc, char *argv[]) {
             std::string flag = "";
             std::istringstream iss(argv[e]);
             iss >> flag;
-           
+            
             //if the -p flag is found 
             if (flag.compare("-p") == 0){
                 int n = 0;
@@ -147,10 +147,10 @@ int main (int argc, char *argv[]) {
         //if file has been retrieved completely - continue with processing data 
         if (gotFile) {
             for (int i = 0; i < operation.size(); i++) {
-                // for (int k = 0; k < x.size(); ++k) {
-                // std::cout << "x: " << x[k] << std::endl;
-                // std::cout << "y: " << y[k] << std::endl;
-                // }
+                for (int k = 0; k < x.size(); ++k) {
+                std::cout << "x: " << x[k] << std::endl;
+                std::cout << "y: " << y[k] << std::endl;
+                }
                 
                 FSObject.tracjectory(x,y,width,height, operation[i], name[i]);
             }
