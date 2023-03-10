@@ -21,7 +21,7 @@ namespace GNSSEN002 {
      * Instantiates neccessary variables. 
      * 
      * **/
-    FrameSequence::FrameSequence(void) : row(0), col(0), mImage(nullptr), imageSequence(), height(0) {}
+    FrameSequence::FrameSequence(void) : row(0), col(0), mImage(nullptr), imageSequence(), width(0), height(0) {}
 
     /***
      * 
@@ -74,11 +74,11 @@ namespace GNSSEN002 {
  
             in >> twofivefive >> std::ws;
  
-            mImage = new unsigned char*[row];
-            for (int i =0; i < row; ++i) {
+            mImage = new unsigned char*[col];
+            for (int i =0; i < col; ++i) {
                     
-                mImage[i] = new unsigned char[col];
-                for (int j =0; j < col; ++j ) {
+                mImage[i] = new unsigned char[row];
+                for (int j =0; j < row; ++j ) {
                     in.read((char*)&mImage[i][j],1);
                 }
             }
@@ -221,22 +221,25 @@ namespace GNSSEN002 {
      * 
      * **/ 
     void FrameSequence::none(int x, int y, int width, int height) {
- 
+        
+        std::cout << "none: " << std::endl;
         unsigned char ** tracP = nullptr;
  
         int xCount = x;
         int yCount = y;
         tracP = new unsigned char*[height];
         for (int i = 0; i < height; ++i) {
+
             xCount++;
             tracP[i] = new unsigned char[width];
             for (int j =0; j < width; ++j ) {
                 yCount++;
+                
                 tracP[i][j] = (unsigned char) mImage[xCount][yCount];                              
             }
             yCount =y;
         }
- 
+        std::cout << "none: " <<  xCount << " " << yCount << std::endl;
         imageSequence.push_back(tracP);
     }
  
@@ -253,11 +256,11 @@ namespace GNSSEN002 {
  
         int xCount = x;
         int yCount = y;
-        tracP = new unsigned char*[width];
-        for (int i = 0; i < width; ++i) {
+        tracP = new unsigned char*[height];
+        for (int i = 0; i < height; ++i) {
             xCount++;
-            tracP[i] = new unsigned char[height];
-            for (int j =0; j < height; ++j ) {
+            tracP[i] = new unsigned char[width];
+            for (int j =0; j < width; ++j ) {
                 yCount++;
                 int p = 255;
                 int pixel = 255 - (int)(mImage[xCount][yCount]);
@@ -394,7 +397,7 @@ namespace GNSSEN002 {
     //  * 
     //  * **/
     FrameSequence::~FrameSequence() {
-        for (int i = 0; i < row; ++i) {
+        for (int i = 0; i < col; ++i) {
             delete [] mImage[i];
         }
         delete [] mImage;
@@ -402,8 +405,13 @@ namespace GNSSEN002 {
         int isSize = imageSequence.size();
         for (int h = 0; h < isSize; ++h) {
             for (int r = 0; r < height; r++) {
-                delete [] imageSequence[h][r];
+                for (int w = 0; w < width; ++w)
+                   imageSequence[h][r][w] = -1;
+
+                delete[] imageSequence[h][r];
             }
+            delete[] imageSequence[h];
+            imageSequence.pop_back();
         }
     }
     
