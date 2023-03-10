@@ -70,7 +70,7 @@ namespace GNSSEN002 {
             }                    
                   
             std::istringstream iss(temp);
-            iss >> col >> std::ws >> row;
+            iss >> row >> std::ws >> col;
  
             in >> twofivefive >> std::ws;
  
@@ -106,8 +106,8 @@ namespace GNSSEN002 {
             
             int y1 = y[d];
             int y2 = y[d+1];
-            // std::cout << "x1: " << x1 << " x2: " << x2 << std::endl;
-            // std::cout << "y1: " << y1 << " y2: " << y2 << std::endl;
+            std::cout << "x1: " << x1 << " x2: " << x2 << std::endl;
+            std::cout << "y1: " << y1 << " y2: " << y2 << std::endl;
             //Calculating the threshold 
             float g = ((float)(y2-y1))/((float)(x2-x1));
             int op = 0;
@@ -166,6 +166,7 @@ namespace GNSSEN002 {
             }
             else {          //if the asbsolute value of the threshold is greater than 1 
                 if (y2 < y1) {
+                    std::cout << "y2<y1" << std::endl;
                     for (int y=y1; y >= y2; y--) {
                         x1+=(1/g);
                         switch (op) {
@@ -252,11 +253,11 @@ namespace GNSSEN002 {
  
         int xCount = x;
         int yCount = y;
-        tracP = new unsigned char*[height];
-        for (int i = 0; i < height; ++i) {
+        tracP = new unsigned char*[width];
+        for (int i = 0; i < width; ++i) {
             xCount++;
-            tracP[i] = new unsigned char[width];
-            for (int j =0; j < width; ++j ) {
+            tracP[i] = new unsigned char[height];
+            for (int j =0; j < height; ++j ) {
                 yCount++;
                 int p = 255;
                 int pixel = 255 - (int)(mImage[xCount][yCount]);

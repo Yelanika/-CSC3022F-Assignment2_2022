@@ -17,7 +17,7 @@ namespace GNSSEN002 {
            int col;
            unsigned char ** mImage;
            std::vector<unsigned char **> imageSequence;
-            int height;
+           int height;
         public: 
             FrameSequence();    //default constructor
             //FrameSequence(int row, int col, unsigned char **mImage, std::vector<unsigned char **> imageSequence, int height);
