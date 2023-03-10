@@ -38,7 +38,7 @@ namespace GNSSEN002 {
      *  - true - if file read completely
      *  - false - if file is not read or not read completely
      * 
-     * **/
+     * **/ 
     bool FrameSequence::getImageDimensions(std::string pgmFile) {
  
         std::ifstream in(pgmFile, std::ios::in | std::ios::binary);
@@ -106,7 +106,8 @@ namespace GNSSEN002 {
             
             int y1 = y[d];
             int y2 = y[d+1];
-
+            std::cout << "x1: " << x1 << " x2: " << x2 << std::endl;
+            std::cout << "y1: " << y1 << " y2: " << y2 << std::endl;
             //Calculating the threshold 
             float g = ((float)(y2-y1))/((float)(x2-x1));
             int op = 0;

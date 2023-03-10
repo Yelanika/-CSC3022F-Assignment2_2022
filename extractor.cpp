@@ -11,7 +11,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
-#include <string>
+#include <string> 
 
 //here *argv[] is an array of pointers pointing to command line
 int main (int argc, char *argv[]) {
@@ -96,7 +96,7 @@ int main (int argc, char *argv[]) {
                     e++;
                     std::istringstream iss3(argv[e]);
                     iss3 >> yV;
-                    if (xV < 0) {       //Error Check
+                    if (yV < 0) {       //Error Check
                         std::cout << "The frame co-ordinates you have entered is incorrect. Please try again." << std::endl;
                         return 0;
                     }
@@ -146,7 +146,12 @@ int main (int argc, char *argv[]) {
 
         //if file has been retrieved completely - continue with processing data 
         if (gotFile) {
-            for (int i = 0; i < operation.size(); i++) {        
+            for (int i = 0; i < operation.size(); i++) {
+                // for (int k = 0; k < x.size(); ++k) {
+                // std::cout << "x: " << x[k] << std::endl;
+                // std::cout << "y: " << y[k] << std::endl;
+                // }
+                
                 FSObject.tracjectory(x,y,width,height, operation[i], name[i]);
             }
         } //else end program        

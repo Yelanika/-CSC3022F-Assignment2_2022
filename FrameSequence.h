@@ -9,7 +9,7 @@
 #define _FrameSequence_h
 #include <string>
 #include <vector>
-
+ 
 namespace GNSSEN002 {
     class FrameSequence {
 
