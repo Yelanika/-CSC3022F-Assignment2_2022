@@ -234,15 +234,20 @@ namespace GNSSEN002 {
             tracP[i] = new unsigned char[width];
             for (int j =0; j < width; ++j ) {
                 yCount++;
-                if (((xCount+height) > col) or (xCount < 0) or ((yCount+width) > row) or (yCount < 0)) {
-                    int p = 255;
+                std::cout << "xCount: " << xCount << " i: " << i  << " row: " << row << " yCount: " << yCount << " j: " << j << " col: " << col <<  std::endl;
+                if (((xCount+i) > row) or (xCount < 0) or ((yCount+j) > col) or (yCount < 0)) {
+                    std::cout << "black" << std::endl;
+                    int p = 0;
                     int * ptr = nullptr;
                     ptr = &p;
                     unsigned char * chptr = (unsigned char *)ptr;
                     tracP[i][j] = *chptr;
                 }
-                else
-                    tracP[i][j] = (unsigned char) mImage[xCount][yCount];                              
+                else {
+                    
+                    tracP[i][j] = (unsigned char) mImage[xCount][yCount];    
+                    std::cout << "pic" << std::endl;                          
+                }
             }
             yCount =y;
         }
@@ -273,8 +278,10 @@ namespace GNSSEN002 {
                 int p = 255;
                 int pixel = 255 - (int)(mImage[xCount][yCount]);
                 int * ptr = nullptr;
-                if (((xCount+height) > col) or (xCount < 0) or ((yCount+width) > row) or (yCount < 0))
+                if (((xCount+height) > col) or (xCount < 0) or ((yCount+width) > row) or (yCount < 0)) {
+                    p = 0;
                     ptr = &p;
+                }
                 else
                     ptr = &pixel;
 
