@@ -222,7 +222,7 @@ namespace GNSSEN002 {
      * **/ 
     void FrameSequence::none(int x, int y, int width, int height) {
         
-        std::cout << "none: " << std::endl;
+        //std::cout << "none: " << std::endl;
         unsigned char ** tracP = nullptr;
  
         int xCount = x;
@@ -234,12 +234,19 @@ namespace GNSSEN002 {
             tracP[i] = new unsigned char[width];
             for (int j =0; j < width; ++j ) {
                 yCount++;
-                
-                tracP[i][j] = (unsigned char) mImage[xCount][yCount];                              
+                if (((xCount+height) > col) or (xCount < 0) or ((yCount+width) > row) or (yCount < 0)) {
+                    int p = 255;
+                    int * ptr = nullptr;
+                    ptr = &p;
+                    unsigned char * chptr = (unsigned char *)ptr;
+                    tracP[i][j] = *chptr;
+                }
+                else
+                    tracP[i][j] = (unsigned char) mImage[xCount][yCount];                              
             }
             yCount =y;
         }
-        std::cout << "none: " <<  xCount << " " << yCount << std::endl;
+        //std::cout << "none: " <<  xCount << " " << yCount << std::endl;
         imageSequence.push_back(tracP);
     }
  
@@ -262,10 +269,14 @@ namespace GNSSEN002 {
             tracP[i] = new unsigned char[width];
             for (int j =0; j < width; ++j ) {
                 yCount++;
+                
                 int p = 255;
                 int pixel = 255 - (int)(mImage[xCount][yCount]);
                 int * ptr = nullptr;
-                ptr = &pixel;
+                if (((xCount+height) > col) or (xCount < 0) or ((yCount+width) > row) or (yCount < 0))
+                    ptr = &p;
+                else
+                    ptr = &pixel;
 
                 unsigned char * chptr = (unsigned char *)ptr;
  
