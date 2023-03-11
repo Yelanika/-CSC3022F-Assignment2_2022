@@ -70,7 +70,7 @@ namespace GNSSEN002 {
             }                    
                   
             std::istringstream iss(temp);
-            iss >> row >> std::ws >> col;
+            iss >> col >> std::ws >> row;
  
             in >> twofivefive >> std::ws;
  
@@ -82,6 +82,28 @@ namespace GNSSEN002 {
                     in.read((char*)&mImage[i][j],1);
                 }
             }
+
+            std::ofstream out;  
+ 
+        
+ 
+            
+            std::string filename = "shit.pgm";
+            out.open(filename, std::ios::out | std::ios::binary);
+            out << "P5" << std::endl;
+            out << col << " " << row << std::endl;
+            out << "255" << std::endl;
+
+            for (int i = 0; i < col; ++i) {
+                for (int j =0; j < row; ++j ) {
+ 
+                    unsigned char * ptr = nullptr;
+                    ptr = &mImage[i][j];
+                    out.write((char *)ptr,1);              
+                }
+            }
+ 
+            out.close();
 
             return true;
         }
@@ -128,7 +150,7 @@ namespace GNSSEN002 {
             float ystart = y1;
             //int slope = 0;
 
-            if (std::fabs(g) < 1.0) {           //if the absolute value of the threshold is smaller than 1
+            if (std::fabs(g) < 0.0) {           //if the absolute value of the threshold is smaller than 1
 
                 if (x2 < x1) {
                     for (int x=x1; x >= x2; x--) {       
@@ -227,16 +249,16 @@ namespace GNSSEN002 {
  
         int xCount = x;
         int yCount = y;
-        tracP = new unsigned char*[height];
-        for (int i = 0; i < height; ++i) {
+        tracP = new unsigned char*[width];
+        for (int i = 0; i < width; ++i) {
 
             xCount++;
-            tracP[i] = new unsigned char[width];
-            for (int j =0; j < width; ++j ) {
+            tracP[i] = new unsigned char[height];
+            for (int j =0; j < height; ++j ) {
                 yCount++;
-                std::cout << "xCount: " << xCount << " i: " << i  << " row: " << row << " yCount: " << yCount << " j: " << j << " col: " << col <<  std::endl;
-                if (((xCount+i) > row) or (xCount < 0) or ((yCount+j) > col) or (yCount < 0)) {
-                    std::cout << "black" << std::endl;
+                //std::cout << "xCount: " << xCount << " i: " << i  << " col: " << col << " yCount: " << yCount << " j: " << j <<  " row: " << row << std::endl;
+                if (((xCount+i) > col) or (xCount < 0) or ((yCount+j) > row) or (yCount < 0)) {
+                    //std::cout << "black" << std::endl;
                     int p = 0;
                     int * ptr = nullptr;
                     ptr = &p;
@@ -246,7 +268,7 @@ namespace GNSSEN002 {
                 else {
                     
                     tracP[i][j] = (unsigned char) mImage[xCount][yCount];    
-                    std::cout << "pic" << std::endl;                          
+                    //std::cout << "pic" << std::endl;                          
                 }
             }
             yCount =y;
@@ -384,8 +406,8 @@ namespace GNSSEN002 {
             out << width << " " << height << std::endl;
             out << "255" << std::endl;
 
-            for (int i = 0; i < height; ++i) {
-                for (int j =0; j < width; ++j ) {
+            for (int i = 0; i < width; ++i) {
+                for (int j =0; j < height; ++j ) {
  
                     unsigned char * ptr = nullptr;
                     ptr = &imageSequence[f][i][j];
@@ -398,8 +420,8 @@ namespace GNSSEN002 {
         std::cout << "Print Image: before" << std::endl;
         int isSize = imageSequence.size();
         for (int h = 0; h < isSize; ++h) {
-            for (int r = 0; r < height; r++) {
-                for (int w = 0; w < width; ++w)
+            for (int r = 0; r < width; r++) {
+                for (int w = 0; w < height; ++w)
                    imageSequence[h][r][w] = 0;
 
                 imageSequence[h][r] = nullptr;
@@ -415,15 +437,15 @@ namespace GNSSEN002 {
     //  * 
     //  * **/
     FrameSequence::~FrameSequence() {
-        for (int i = 0; i < col; ++i) {
+        for (int i = 0; i < row; ++i) {
             delete [] mImage[i];
         }
         delete [] mImage;
 
         int isSize = imageSequence.size();
         for (int h = 0; h < isSize; ++h) {
-            for (int r = 0; r < height; r++) {
-                for (int w = 0; w < width; ++w)
+            for (int r = 0; r < width; r++) {
+                for (int w = 0; w < height; ++w)
                    imageSequence[h][r][w] = -1;
 
                 delete[] imageSequence[h][r];
