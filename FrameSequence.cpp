@@ -150,7 +150,7 @@ namespace GNSSEN002 {
             float ystart = y1;
             //int slope = 0;
 
-            if (std::fabs(g) < 0.0) {           //if the absolute value of the threshold is smaller than 1
+            if (std::fabs(g) < 1.0) {           //if the absolute value of the threshold is smaller than 1
 
                 if (x2 < x1) {
                     for (int x=x1; x >= x2; x--) {       
@@ -252,12 +252,12 @@ namespace GNSSEN002 {
         tracP = new unsigned char*[height];
         for (int i = 0; i < height; ++i) {
 
-            xCount++;
+            
             tracP[i] = new unsigned char[width];
             for (int j =0; j < width; ++j ) {
-                yCount++;
-                //std::cout << "xCount: " << xCount << " i: " << i  << " col: " << col << " yCount: " << yCount << " j: " << j <<  " row: " << row << std::endl;
-                if (((xCount+i) > row) or (xCount < 0) or ((yCount+j) > col) or (yCount < 0)) {
+                
+                //std::cout << " row: " << row << " x: " << (xCount) << "       col: " << col << " y: " << (yCount) << std::endl;
+                if (((xCount) >= row) or (xCount < 0) or ((yCount) >= col) or (yCount < 0)) {
                     //std::cout << "black" << std::endl;
                     int p = 0;
                     int * ptr = nullptr;
@@ -270,8 +270,10 @@ namespace GNSSEN002 {
                     tracP[i][j] = (unsigned char) mImage[xCount][yCount];    
                     //std::cout << "pic" << std::endl;                          
                 }
+                yCount++;
             }
             yCount =y;
+            xCount++;
         }
         //std::cout << "none: " <<  xCount << " " << yCount << std::endl;
         imageSequence.push_back(tracP);
