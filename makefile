@@ -5,8 +5,8 @@
 CC = g++
 CCFLAGS = -std=c++2a
 
-extractor.exe: extractor.o FrameSequence.o 
-	$(CC) $(CCFLAGS) FrameSequence.o extractor.o -o extractor.exe
+extractor: extractor.o FrameSequence.o 
+	$(CC) $(CCFLAGS) FrameSequence.o extractor.o -o extractor
 
 extractor.o: extractor.cpp FrameSequence.h
 	$(CC) $(CCFLAGS) extractor.cpp -c
@@ -16,5 +16,5 @@ FrameSequence.o: FrameSequence.cpp FrameSequence.h
 
 clean:
 	rm -f *.o
-	rm extractor.exe
+	rm extractor
 	rm *.pgm
