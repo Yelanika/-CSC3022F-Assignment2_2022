@@ -294,26 +294,31 @@ namespace GNSSEN002 {
         int yCount = y;
         tracP = new unsigned char*[height];
         for (int i = 0; i < height; ++i) {
-            xCount++;
+            
             tracP[i] = new unsigned char[width];
             for (int j =0; j < width; ++j ) {
-                yCount++;
+                
                 
                 int p = 255;
-                int pixel = 255 - (int)(mImage[xCount][yCount]);
+                
                 int * ptr = nullptr;
-                if (((xCount+height) > col) or (xCount < 0) or ((yCount+width) > row) or (yCount < 0)) {
+                if (((xCount) >= row) or (xCount < 0) or ((yCount) >= col) or (yCount < 0)) {
                     p = 0;
                     ptr = &p;
                 }
-                else
+                else {
+                    int pixel = 255 - (int)(mImage[xCount][yCount]);
                     ptr = &pixel;
+                }
 
                 unsigned char * chptr = (unsigned char *)ptr;
  
-                tracP[i][j] = *chptr;                              
+                tracP[i][j] = *chptr; 
+
+                yCount++;                             
             }
             yCount =y;
+            xCount++;
         }
  
         imageSequence.push_back(tracP);
