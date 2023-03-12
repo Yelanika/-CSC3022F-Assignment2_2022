@@ -74,36 +74,36 @@ namespace GNSSEN002 {
  
             in >> twofivefive >> std::ws;
  
-            mImage = new unsigned char*[col];
-            for (int i =0; i < col; ++i) {
+            mImage = new unsigned char*[row];
+            for (int i =0; i < row; ++i) {
                     
-                mImage[i] = new unsigned char[row];
-                for (int j =0; j < row; ++j ) {
+                mImage[i] = new unsigned char[col];
+                for (int j =0; j < col; ++j ) {
                     in.read((char*)&mImage[i][j],1);
                 }
             }
 
-            std::ofstream out;  
+            // std::ofstream out;  
  
         
  
             
-            std::string filename = "shit.pgm";
-            out.open(filename, std::ios::out | std::ios::binary);
-            out << "P5" << std::endl;
-            out << col << " " << row << std::endl;
-            out << "255" << std::endl;
+            // std::string filename = "shit.pgm";
+            // out.open(filename, std::ios::out | std::ios::binary);
+            // out << "P5" << std::endl;
+            // out << col << " " << row << std::endl;
+            // out << "255" << std::endl;
 
-            for (int i = 0; i < col; ++i) {
-                for (int j =0; j < row; ++j ) {
+            // for (int i = 0; i < col; ++i) {
+            //     for (int j =0; j < row; ++j ) {
  
-                    unsigned char * ptr = nullptr;
-                    ptr = &mImage[i][j];
-                    out.write((char *)ptr,1);              
-                }
-            }
+            //         unsigned char * ptr = nullptr;
+            //         ptr = &mImage[i][j];
+            //         out.write((char *)ptr,1);              
+            //     }
+            // }
  
-            out.close();
+            //out.close();
 
             return true;
         }
@@ -157,11 +157,11 @@ namespace GNSSEN002 {
                         ystart = ystart + g; 
                         switch (op) {
                             case 1: { 
-                                FrameSequence::none(x, std::round(ystart), width, height);
+                                FrameSequence::none(std::round(ystart),x, width, height);
                                 break;
                             }
                             case 2: {
-                                FrameSequence::invert(x, std::round(y1), width, height);
+                                FrameSequence::invert(std::round(y1),x, width, height);
                                 break;
                             }
                         };
@@ -172,11 +172,11 @@ namespace GNSSEN002 {
                         ystart = ystart + g; 
                         switch (op) {
                             case 1: { 
-                                FrameSequence::none(x, std::round(ystart), width, height);
+                                FrameSequence::none(std::round(ystart),x, width, height);
                                 break;
                             }
                             case 2: {
-                                FrameSequence::invert(x, std::round(y1), width, height);
+                                FrameSequence::invert( std::round(y1),x, width, height);
                                 break;
                             }
                         };
@@ -193,11 +193,11 @@ namespace GNSSEN002 {
                         x1+=(1/g);
                         switch (op) {
                             case 1: { 
-                                FrameSequence::none(std::round(x1), y, width, height);
+                                FrameSequence::none(y, std::round(x1), width, height);
                                 break;
                             }
                             case 2: {
-                                FrameSequence::invert(std::round(x1), y, width, height);
+                                FrameSequence::invert(y, std::round(x1), width, height);
                                 break;
                             }
                         };
@@ -208,11 +208,11 @@ namespace GNSSEN002 {
                         x1+=(1/g);
                         switch (op) {
                             case 1: { 
-                                FrameSequence::none(std::round(x1), y, width, height);
+                                FrameSequence::none(y, std::round(x1), width, height);
                                 break;
                             }
                             case 2: {
-                                FrameSequence::invert(std::round(x1), y, width, height);
+                                FrameSequence::invert(y, std::round(x1), width, height);
                                 break;
                             }
                         };
@@ -249,15 +249,15 @@ namespace GNSSEN002 {
  
         int xCount = x;
         int yCount = y;
-        tracP = new unsigned char*[width];
-        for (int i = 0; i < width; ++i) {
+        tracP = new unsigned char*[height];
+        for (int i = 0; i < height; ++i) {
 
             xCount++;
-            tracP[i] = new unsigned char[height];
-            for (int j =0; j < height; ++j ) {
+            tracP[i] = new unsigned char[width];
+            for (int j =0; j < width; ++j ) {
                 yCount++;
                 //std::cout << "xCount: " << xCount << " i: " << i  << " col: " << col << " yCount: " << yCount << " j: " << j <<  " row: " << row << std::endl;
-                if (((xCount+i) > col) or (xCount < 0) or ((yCount+j) > row) or (yCount < 0)) {
+                if (((xCount+i) > row) or (xCount < 0) or ((yCount+j) > col) or (yCount < 0)) {
                     //std::cout << "black" << std::endl;
                     int p = 0;
                     int * ptr = nullptr;
@@ -406,8 +406,8 @@ namespace GNSSEN002 {
             out << width << " " << height << std::endl;
             out << "255" << std::endl;
 
-            for (int i = 0; i < width; ++i) {
-                for (int j =0; j < height; ++j ) {
+            for (int i = 0; i < height; ++i) {
+                for (int j =0; j < width; ++j ) {
  
                     unsigned char * ptr = nullptr;
                     ptr = &imageSequence[f][i][j];
@@ -420,8 +420,8 @@ namespace GNSSEN002 {
         std::cout << "Print Image: before" << std::endl;
         int isSize = imageSequence.size();
         for (int h = 0; h < isSize; ++h) {
-            for (int r = 0; r < width; r++) {
-                for (int w = 0; w < height; ++w)
+            for (int r = 0; r < height; r++) {
+                for (int w = 0; w < width; ++w)
                    imageSequence[h][r][w] = 0;
 
                 imageSequence[h][r] = nullptr;
@@ -444,8 +444,8 @@ namespace GNSSEN002 {
 
         int isSize = imageSequence.size();
         for (int h = 0; h < isSize; ++h) {
-            for (int r = 0; r < width; r++) {
-                for (int w = 0; w < height; ++w)
+            for (int r = 0; r < height; r++) {
+                for (int w = 0; w < width; ++w)
                    imageSequence[h][r][w] = -1;
 
                 delete[] imageSequence[h][r];
