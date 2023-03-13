@@ -1,6 +1,18 @@
 # Yelanika Gunasekara
 # -CSC3022F-Assignment2_2023
 
+FrameSequence.h:
+  - This is the header file for the FrameSequence Class.
+  - The FrameSequence class is used to implement all the methods for this assignment.
+
+FrameSequence.cpp:
+  - This is the source file where in which the methods for the FrameSequence Class is implemented.
+  - The imageSequence vector is implemented in this file.
+
+extractor.cpp:
+- This is the driver source file which extracts the data from the command line.
+- It also calls the methods of the FrameSequence Class here.
+
 How to run the program:
 - running 'make' will compile the project 
 - 'extractor' is the is the executable file
