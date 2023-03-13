@@ -123,7 +123,9 @@ int main (int argc, char *argv[]) {
             }
 
             //the -w flag data is read
-            for (int s = e; s < argc; s++ ) {
+            
+            for (int s = e; s < argc; s++) {
+                //std::cout << s << " " << argc << std::endl;
                 e++;
                 std::string temp;
                 e++;
@@ -151,6 +153,7 @@ int main (int argc, char *argv[]) {
                 // std::cout << "x: " << x[k] << std::endl;
                 // std::cout << "y: " << y[k] << std::endl;
                 // }
+                std::cout << operation.size() << std::endl;
                 
                 FSObject.tracjectory(x,y,width,height, operation[i], name[i]);
             }
