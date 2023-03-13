@@ -99,7 +99,7 @@ int main (int argc, char *argv[]) {
             iss3 >> height;
 
             //Error checking the width and height of frame 
-            if ((height < 0) || ( width < 0)) {
+            if ((height <= 0) || ( width <= 0)) {
                 std::cout << "The frame size you have entered is incorrect. Please try again." << std::endl;
                 return 0;
             }

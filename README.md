@@ -39,6 +39,6 @@ imageName.pgm:
  Note: n >= 2 
 
 Program Constraints:
-1. The width and height for the frame that are entered have to be greater than zero. 
-2. If the width and height of the frame entered are larger than the actual width and height of the image, black pixels will be placed once the boundary of the images width and height has been reached.
-3. The x and y coordinates ...
+  1. The width and height for the frame that are entered have to be greater than zero, else an error is thrown and the program won't run. i.e., a width or height value that is <= 0, will throw an error.
+  2. If the width and height of the frame entered are larger than the actual width and height of the image, black pixels will be placed after the boundary of the images width and height has been reached.
+  3. If x and y coordinates are negative or go beyond the width and height of the actual image, i.e., the coordinates are out of bound, black pixels will be placed there.
