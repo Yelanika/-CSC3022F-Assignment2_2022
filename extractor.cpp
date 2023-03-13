@@ -124,7 +124,7 @@ int main (int argc, char *argv[]) {
 
             //the -w flag data is read
             
-            for (int s = e; s < argc; s++) {
+            for (int s = e; s < argc; s=s+3) {
                 //std::cout << s << " " << argc << std::endl;
                 e++;
                 std::string temp;
