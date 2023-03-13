@@ -154,7 +154,7 @@ namespace GNSSEN002 {
 
                 if (x2 < x1) {
                     for (int x=x1-1; x >= x2; x--) {    
-                        std::cout << x << std::endl;   
+                        // std::cout << x << std::endl;   
                         ystart = ystart + g; 
                         switch (op) {
                             case 1: { 
@@ -171,7 +171,7 @@ namespace GNSSEN002 {
                 else{
                     for (int x=x1+1; x <= x2; x++) {       
                         ystart = ystart + g; 
-                        std::cout << x << std::endl; 
+                        // std::cout << x << std::endl; 
                         switch (op) {
                             case 1: { 
                                 FrameSequence::none(std::round(ystart),x, width, height);
@@ -193,7 +193,7 @@ namespace GNSSEN002 {
                     //std::cout << "y2<y1" << std::endl;
                     for (int y=y1-1; y >= y2; y--) {
                         x1+=(1/g);
-                        std::cout << y << std::endl; 
+                        // std::cout << y << std::endl; 
                         switch (op) {
                             case 1: { 
                                 FrameSequence::none(y, std::round(x1), width, height);
@@ -209,7 +209,7 @@ namespace GNSSEN002 {
                 else {
                     for (int y=y1+1; y <= y2; y++) {
                         x1+=(1/g);
-                        std::cout << y << std::endl; 
+                        // std::cout << y << std::endl; 
                         switch (op) {
                             case 1: { 
                                 FrameSequence::none(y, std::round(x1), width, height);
