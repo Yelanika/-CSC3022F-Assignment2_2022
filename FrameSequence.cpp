@@ -25,13 +25,6 @@ namespace GNSSEN002 {
 
     /***
      * 
-     * Custom Constructor
-     * 
-     * **/
-    //FrameSequence::FrameSequence(int row, int col, unsigned char **mImage, std::vector<unsigned char **> imageSequence, int height) : row(row), col(col), mImage(nullptr), imageSequence(), height(height) {}
-
-    /***
-     * 
      * This function reads the pgm file in binary and gets the total rows and columns of the 
      * file.
      * The function returns bool value:
@@ -83,28 +76,8 @@ namespace GNSSEN002 {
                 }
             }
 
-            // std::ofstream out;  
- 
-        
- 
+            in.close();
             
-            // std::string filename = "shit.pgm";
-            // out.open(filename, std::ios::out | std::ios::binary);
-            // out << "P5" << std::endl;
-            // out << col << " " << row << std::endl;
-            // out << "255" << std::endl;
-
-            // for (int i = 0; i < col; ++i) {
-            //     for (int j =0; j < row; ++j ) {
- 
-            //         unsigned char * ptr = nullptr;
-            //         ptr = &mImage[i][j];
-            //         out.write((char *)ptr,1);              
-            //     }
-            // }
- 
-            //out.close();
-
             return true;
         }
 
@@ -128,8 +101,7 @@ namespace GNSSEN002 {
             
             int y1 = y[d];
             int y2 = y[d+1];
-            //std::cout << "x1: " << x1 << " x2: " << x2 << std::endl;
-            //std::cout << "y1: " << y1 << " y2: " << y2 << std::endl;
+
             //Calculating the threshold 
             float g = ((float)(y2-y1))/((float)(x2-x1));
             int op = 0;
@@ -147,18 +119,14 @@ namespace GNSSEN002 {
                 op=2;
             }
 
-            float ystart = y1;
-            //int slope = 0;
-
             if (std::fabs(g) < 1.0) {           //if the absolute value of the threshold is smaller than 1
 
                 if (x2 < x1) {
-                    for (int x=x1-1; x >= x2; x--) {    
-                        // std::cout << x << std::endl;   
-                        ystart = ystart + g; 
+                    for (int x=x1-1; x >= x2; x--) {
+                        y1 += g; 
                         switch (op) {
                             case 1: { 
-                                FrameSequence::none(std::round(ystart),x, width, height);
+                                FrameSequence::none(std::round(y1),x, width, height);
                                 break;
                             }
                             case 2: {
@@ -170,15 +138,14 @@ namespace GNSSEN002 {
                 }
                 else{
                     for (int x=x1+1; x <= x2; x++) {       
-                        ystart = ystart + g; 
-                        // std::cout << x << std::endl; 
+                        y1 += g; 
                         switch (op) {
                             case 1: { 
-                                FrameSequence::none(std::round(ystart),x, width, height);
+                                FrameSequence::none(std::round(y1),x, width, height);
                                 break;
                             }
                             case 2: {
-                                FrameSequence::invert( std::round(y1),x, width, height);
+                                FrameSequence::invert(std::round(y1),x, width, height);
                                 break;
                             }
                         };
@@ -190,10 +157,8 @@ namespace GNSSEN002 {
             }
             else {          //if the asbsolute value of the threshold is greater than 1 
                 if (y2 < y1) {
-                    //std::cout << "y2<y1" << std::endl;
                     for (int y=y1-1; y >= y2; y--) {
                         x1+=(1/g);
-                        // std::cout << y << std::endl; 
                         switch (op) {
                             case 1: { 
                                 FrameSequence::none(y, std::round(x1), width, height);
@@ -209,7 +174,6 @@ namespace GNSSEN002 {
                 else {
                     for (int y=y1+1; y <= y2; y++) {
                         x1+=(1/g);
-                        // std::cout << y << std::endl; 
                         switch (op) {
                             case 1: { 
                                 FrameSequence::none(y, std::round(x1), width, height);
@@ -248,7 +212,7 @@ namespace GNSSEN002 {
      * **/ 
     void FrameSequence::none(int x, int y, int width, int height) {
         
-        //std::cout << "none: " << std::endl;
+
         unsigned char ** tracP = nullptr;
  
         int xCount = x;
@@ -261,9 +225,7 @@ namespace GNSSEN002 {
             for (int j =0; j < width; ++j ) {
                 yCount++;
                 
-                //std::cout << " x: " << (xCount) << "       y: " << (yCount) << std::endl;
-                if (((xCount) >= row) or (xCount < 0) or ((yCount) >= col) or (yCount < 0)) {
-                    //std::cout << "black" << std::endl;
+                if (((xCount) >= row) or (xCount < 0) or ((yCount) >= col) or (yCount < 0)) {       //taking account for out of bound values
                     int p = 0;
                     int * ptr = nullptr;
                     ptr = &p;
@@ -271,9 +233,7 @@ namespace GNSSEN002 {
                     tracP[i][j] = *chptr;
                 }
                 else {
-                    
-                    tracP[i][j] = (unsigned char) mImage[xCount][yCount];    
-                    //std::cout << "pic" << std::endl;                          
+                    tracP[i][j] = (unsigned char) mImage[xCount][yCount];                       
                 }
                 
                 
@@ -281,7 +241,6 @@ namespace GNSSEN002 {
             yCount =y;
 
         }
-        //std::cout << "none: " <<  xCount << " " << yCount << std::endl;
         imageSequence.push_back(tracP);
     }
  
@@ -293,7 +252,6 @@ namespace GNSSEN002 {
      * **/
     void FrameSequence::invert(int x, int y, int width, int height) {
         
-        //std::cout << "ERROR" << std::endl;
         unsigned char ** tracP = nullptr;
  
         int xCount = x;
@@ -309,7 +267,7 @@ namespace GNSSEN002 {
                 int p = 255;
                 
                 int * ptr = nullptr;
-                if (((xCount) >= row) or (xCount < 0) or ((yCount) >= col) or (yCount < 0)) {
+                if ((xCount >= row) or (xCount < 0) or (yCount >= col) or (yCount < 0)) {           //taking account for out of bound values
                     p = 0;
                     ptr = &p;
                 }
@@ -324,8 +282,7 @@ namespace GNSSEN002 {
                 
                                              
             }
-            yCount =y;
-            
+            yCount =y;           
             
         }
  
@@ -375,19 +332,17 @@ namespace GNSSEN002 {
             out.close();
             fnew++;
         };
-        std::cout << "reverse Print Image: before" << std::endl;
+
         int isSize = imageSequence.size();
-        for (int h = 0; h < isSize; ++h) {
+        for (int h = 0; h < isSize; ++h) {          //releasing the memory of pointer inside imageSequence vector
             for (int r = 0; r < height; r++) {
                 for (int w = 0; w < width; ++w)
                     imageSequence[h][r][w] = 0;
                 imageSequence[h][r] = nullptr; 
                     
             }
-            imageSequence.pop_back();
+            imageSequence.pop_back();           //Emptying the vector of any values
         }
-        std::cout << "reverse Print Image: after" << std::endl;
-        std::cout << imageSequence.size() << std::endl;
  
     }    
  
@@ -401,7 +356,6 @@ namespace GNSSEN002 {
        
         std::ofstream out;  
 
-        //std::cout << imageSequence.size() << std::endl;
  
         for (int f =0; f < imageSequence.size(); f++) {
  
@@ -434,19 +388,18 @@ namespace GNSSEN002 {
  
             out.close();
         }
-        //std::cout << "Print Image: before" << std::endl;
+
         int isSize = imageSequence.size();
-        for (int h = 0; h < isSize; ++h) {
+        for (int h = 0; h < isSize; ++h) {          //releasing the memory of pointer inside imageSequence vector
             for (int r = 0; r < height; r++) {
                 for (int w = 0; w < width; ++w)
                    imageSequence[h][r][w] = 0;
 
                 imageSequence[h][r] = nullptr;
             }
-            imageSequence.pop_back();
+            imageSequence.pop_back();           //Emptying the vector of any values
         }
-        //std::cout << "Print Image: after" << std::endl;
-        //std::cout << imageSequence.size() << std::endl;
+    
     }
  
     // /**
