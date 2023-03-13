@@ -48,63 +48,43 @@ int main (int argc, char *argv[]) {
             std::string flag = "";
             std::istringstream iss(argv[e]);
             iss >> flag;
-            
+
             //if the -p flag is found 
             if (flag.compare("-p") == 0){
-                std::cout << "p" << std::endl;
                 int n = 0;
                 e++;
                 std::istringstream iss4(argv[e]);
                 iss4 >> n;
-
+                
                 for (int s = 0; s < n; s++) {
                     e++;
                     std::istringstream iss2(argv[e]);
                     iss2 >> xV;
-                    if (xV < 0) {           //Error Check
-                        std::cout << "The frame co-ordinates you have entered is incorrect. Please try again.";
-                        return 0;
-                    }
-                    else                    
-                        x.push_back(xV);
+                    x.push_back(xV);
 
                     e++;
                     std::istringstream iss3(argv[e]);
                     iss3 >> yV;
-                    if (yV < 0) {           //Error Check
-                        std::cout << "The frame co-ordinates you have entered is incorrect. Please try again.";
-                        return 0;
-                    }
-                    else 
-                        y.push_back(yV);
-                }
-                
+                    y.push_back(yV);
+                }              
             }
+            
             //if the -t flag is found
             else if (flag.compare("-t") == 0) {
-                std::cout << "t" << std::endl;
+
                 for (int s = 0; s < 2; s++) {
 
                     e++;
                     std::istringstream iss2(argv[e]);
                     iss2 >> xV;
-                    if (int(xV) < 0) {          //Error Check
-                        std::cout << "The frame co-ordinates you have entered is incorrect. Please try again." << std::endl;
-                        return 0;
-                    }
-                    else 
-                        x.push_back(xV);
+                    x.push_back(xV);
 
                     e++;
                     std::istringstream iss3(argv[e]);
                     iss3 >> yV;
-                    if (yV < 0) {       //Error Check
-                        std::cout << "The frame co-ordinates you have entered is incorrect. Please try again." << std::endl;
-                        return 0;
-                    }
-                    else 
-                        y.push_back(yV);
+                    y.push_back(yV);
                 }
+
             }
 
             //the -s flag data is read
@@ -141,8 +121,9 @@ int main (int argc, char *argv[]) {
                 name.push_back(temp);
             }
 
-        }
 
+        }
+    }
         //Invokes the default constructor 
         GNSSEN002::FrameSequence FSObject;
         //Calls the getImageDimensions Method which returns true if file copied completely else false
@@ -151,12 +132,11 @@ int main (int argc, char *argv[]) {
         //if file has been retrieved completely - continue with processing data 
         if (gotFile) {
             for (int i = 0; i < operation.size(); i++) {
-                for (int k = 0; k < x.size(); ++k) {
-                
-                FSObject.tracjectory(x,y,width,height, operation[i], name[i]);
+                for (int k = 0; k < x.size(); ++k) 
+                    FSObject.tracjectory(x,y,width,height, operation[i], name[i]);
             }
         } //else end program        
-    }   
+       
 
     return 0;
 
